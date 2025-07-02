@@ -1,0 +1,6 @@
+import { config } from 'dotenv';
+
+//if we have multiple env files, we can specify the path
+config({ path: `.env.${process.env.NODE_ENV || 'development'}.local` });
+
+export const { PORT, NODE_ENV } = process.env;

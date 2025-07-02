@@ -56,6 +56,8 @@ typings/
 
 # dotenv environment variables file
 .env
+#to ignore other env file as well like in this case development and production
+.env.*.local
 
 # next.js build output
 .next
