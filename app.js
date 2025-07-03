@@ -3,6 +3,7 @@ import { PORT } from './config/env.js';
 import userRouter from './routes/user.routes.js';
 import authRouter from './routes/auth.routes.js';
 import subscriptionRouter from './routes/subscription.routes.js';
+import connectToDatabase from './database/mongodb.js';
 
 const app = express();
 //app.use(express.json());//this is a middleware to parse JSON bodies we will not use this instead use other routes
@@ -14,8 +15,11 @@ app.get('/', (req, res) => {
   res.send('WELCOME TO SUBSCRIPTION TRACKER!');
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server is running on port http://localhost:${PORT}`);
+
+  //database connection and since its a asyn operation we will use await
+  await connectToDatabase();
 });
 
 export default app;
