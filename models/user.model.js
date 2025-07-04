@@ -20,13 +20,13 @@ const userSchema = new mongoose.Schema({
                 return /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(v);
             },
             message: props => `${props.value} is not a valid email address!`
-        },
-        password: {
-            type: String,
-            required: [true, "Password is required"],
-            minLenght: [6, "Password must be at least 6 characters long"],
-            maxLenght: [20, "Password must be at most 20 characters long"],
         }
+    },
+    password: {
+        type: String,
+        required: [true, "Password is required"],
+        minLenght: [6, "Password must be at least 6 characters long"],
+        maxLenght: [20, "Password must be at most 20 characters long"],
     }
 }, { timestamps: true }); //so we know when the user was created or updated
 

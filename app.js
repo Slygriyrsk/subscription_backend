@@ -9,7 +9,8 @@ import errorMiddleware from './middlewares/error.middleware.js';
 
 const app = express();
 
-//app.use(express.json());//this is a middleware to parse JSON bodies we will not use this instead use other routes
+//need to use this to allow the req.body to be parsed and available in the req.body
+app.use(express.json());//this is a middleware to parse JSON bodies we will not use this instead use other routes
 //app.use(express.urlencoded({ extended: false })); // another middleware to parse URL-encoded bodies by deault that express gives us
 //app.use(cookieParser()); // this is a middleware to parse cookies, we will not use this instead use other routes
 
