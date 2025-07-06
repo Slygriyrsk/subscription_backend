@@ -63,7 +63,7 @@ const subscriptionSchema = new mongoose.Schema({
         //required: [true, "Renewal date is required"], we don't need to give this because we can pass a function checking for that renewal date based on the start date
         validate: {
             validator: function (val) {
-                return val > this.startDate; // Ensure renewal date is after start date
+                return val == null || val > this.startDate; //ensure renewal date is after start date
             },
             message: "Renewal date cannot be in the past"
         }
@@ -77,7 +77,7 @@ const subscriptionSchema = new mongoose.Schema({
     }
 }, { timestamps: true }); // Automatically manage createdAt and updatedAt fields
 
-subscriptionSchema.pre('save', function (next) {
+/* subscriptionSchema.pre('save', function (next) {
     // Automatically set renewalDate based on frequency
     if (!this.renewalDate) {
         const frequencyMap = {
@@ -95,6 +95,39 @@ subscriptionSchema.pre('save', function (next) {
     if(this.renewalDate < new Date()) {
         this.status = "expired"; // Automatically set status to expired if renewal date is in the past
     }
+    next();
+}); */
+
+subscriptionSchema.pre('save', function (next) {
+    if (!this.renewalDate) {
+        const now = new Date(this.startDate);
+        const frequency = this.frequency;
+
+        switch (frequency) {
+            case 'daily':
+                now.setDate(now.getDate() + 1);
+                break;
+            case 'weekly':
+                now.setDate(now.getDate() + 7);
+                break;
+            case 'monthly':
+                now.setMonth(now.getMonth() + 1);
+                break;
+            case 'yearly':
+                now.setFullYear(now.getFullYear() + 1);
+                break;
+            default:
+                now.setMonth(now.getMonth() + 1);
+        }
+
+        this.renewalDate = now;
+    }
+
+    // Optional: expire subscriptions that are already outdated
+    if (this.renewalDate < new Date()) {
+        this.status = "expired";
+    }
+
     next();
 });
 

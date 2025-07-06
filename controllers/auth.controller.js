@@ -115,10 +115,16 @@ export const signIn = async (req, res, next) => {
     }
 }
 
+//but this doesnot clears the token directly, it will be valid for some hours so we can still make other api req with the signedout user tokens because the signature is still there 
+//even if i am signed out, to move from this we can use some complex blocklist schema to block the tokens when signed out
 export const signOut = (req, res, next) => {
-    try {
-
-    } catch (error) {
-        next(error); // Pass the error to the global error handler
-    }
-}
+    // For a stateless JWT system, logout is a client-side responsibility.
+    // The client must delete its stored token.
+    // This server endpoint is here to provide a formal "logout" route and response.
+    // There is no server-side state (like a session) to clear.
+    
+    res.status(200).json({
+        success: true,
+        message: "User signed out successfully. Please clear your token on the client side."
+    });
+};
